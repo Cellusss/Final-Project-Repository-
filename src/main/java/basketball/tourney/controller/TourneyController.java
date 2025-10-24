@@ -34,7 +34,7 @@ public class TourneyController {
 	@PostMapping("/{tourneyId}/location")
   @ResponseStatus(code = HttpStatus.CREATED)
    public LocationData addLocation(@PathVariable Long tourneyId, @RequestBody LocationData locationData) {
-	 log.info("Adding Location {}", locationData); 
+	 log.info("Adding Location {} to tourney with Id {} ", locationData, tourneyId); 
 	 return tourneyService.saveLocation(tourneyId, locationData);
  }
 
@@ -45,7 +45,7 @@ log.info("updating location {}", locationData);
 return tourneyService.saveLocation(tourneyId,locationData);
 }
 
-@GetMapping("/location/(locationId)")
+@GetMapping("/location/{locationId}")
 public LocationData retrieveLocation(@PathVariable Long locationId) {
  log.info("Retrieving location with ID= {}", locationId);
  return tourneyService.retrieveLocationBYId(locationId); 

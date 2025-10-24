@@ -32,13 +32,13 @@ private TeamDao teamDao;
 	@Transactional(readOnly = false )
 	public LocationData saveLocation(Long tourneyId, LocationData locationData) {
 		Tourney tourney = findTourneyById(tourneyId);
-		Location Location = findOrCreateLocation(tourneyId, locationData.getLocationId());
+		Location location = findOrCreateLocation(tourneyId, locationData.getLocationId());
 		
-		copyLocationFields(Location, locationData); 
+		copyLocationFields(location, locationData); 
 		 
-		Location.setTourney(tourney);
-		tourney.getLocations().add(Location);
-		Location savedLocation = locationDao.save(Location);
+		location.setTourney(tourney);
+		tourney.getLocations().add(location);
+		Location savedLocation = locationDao.save(location);
 		return new LocationData(savedLocation);
 	
 	
@@ -48,6 +48,7 @@ private TeamDao teamDao;
 	private void copyLocationFields(Location location, LocationData locationData) {
 
 		location.setLocationId(locationData.getLocationId());
+		location.setBusinessName(locationData.getBusinessName());
 		location.setState(locationData.getState());
 		location.setCity(locationData.getCity());
 		location.setPhone(locationData.getPhone());
@@ -60,13 +61,13 @@ private TeamDao teamDao;
 
 
 	private Location findOrCreateLocation(Long tourneyId, Long locationId) {
-   Location location;
+   
 		
-		if(Objects.isNull(tourneyId)) {
-			location = new Location();
-		} else { 
+		if(Objects.isNull(locationId)) {
+			return new Location();
+		}
 	
-			}
+			
 		return findLocationById(tourneyId,locationId);
 	}
 	
@@ -79,7 +80,7 @@ private TeamDao teamDao;
 	private Location findLocationById(Long tourneyId, Long locationId) {
 		Location location = locationDao.findById(locationId)
 		 .orElseThrow (() -> new NoSuchElementException ("Location with ID=" + locationId + "was not found."));
-		if (!location.getTourney().getTourneyId().equals(tourneyId)) {
+		if (location.getTourney().getTourneyId() !=tourneyId) {
 			throw new IllegalArgumentException("Location with ID=" + locationId + "does not host tourney with ID" + tourneyId);
 		}
 		return location;
