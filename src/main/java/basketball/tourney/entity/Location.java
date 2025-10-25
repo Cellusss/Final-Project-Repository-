@@ -32,7 +32,7 @@ public class Location {
  
  @ToString.Exclude
  @EqualsAndHashCode.Exclude
- @ManyToOne( cascade = CascadeType.ALL)
+ @ManyToOne( cascade = CascadeType.PERSIST)
  @JoinColumn(name="tourney_id")
  private Tourney tourney;
 
